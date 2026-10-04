@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload, Image as ImageIcon, Check, Trash2, Sparkles } from 'lucide-react';
 import { saveMemory } from '../utils/db';
+import { MINIMAL_CAPTIONS } from '../data/quotes';
 
 export default function UploadModal({ isOpen, onClose, onMemoryAdded }) {
   const [images, setImages] = useState([]);
@@ -91,7 +92,7 @@ export default function UploadModal({ isOpen, onClose, onMemoryAdded }) {
         const newMemory = {
           id: img.id,
           imageUrl: img.url,
-          caption: caption.trim() || "", // can be edited later
+          caption: caption.trim() || MINIMAL_CAPTIONS[(Date.now() + i) % MINIMAL_CAPTIONS.length],
           date: date,
           location: location.trim() || "",
           quote: quote.trim() || "",
@@ -217,7 +218,7 @@ export default function UploadModal({ isOpen, onClose, onMemoryAdded }) {
             <div>
               <input
                 type="text"
-                placeholder="Caption for these photos (leave blank to add later)"
+                placeholder="Caption (leave blank to auto-generate a sweet minimal caption!)"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400 bg-white"

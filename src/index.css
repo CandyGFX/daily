@@ -1,12 +1,24 @@
 @import "tailwindcss";
 
 @layer base {
-  body {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html, body {
     margin: 0;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: #fff8f8;
     color: #4a3e3d;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  img {
+    content-visibility: auto;
+    transform: translateZ(0);
   }
 }
 

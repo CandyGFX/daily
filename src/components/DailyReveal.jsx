@@ -281,8 +281,8 @@ export default function DailyReveal({
               <blockquote className="text-base sm:text-lg font-serif italic text-gray-800 leading-relaxed">
                 "{activeQuote?.quote || currentMemory?.quote || "I love you more than yesterday, but less than tomorrow."}"
               </blockquote>
-              <div className="mt-2 text-xs font-semibold text-rose-600 uppercase tracking-wider">
-                — {activeQuote?.author || coupleNames || "Yours Forever"}
+              <div className="mt-2 text-xs font-semibold text-rose-500 uppercase tracking-wider flex items-center justify-center gap-1">
+                <span>With All My Heart 💕</span>
               </div>
               {activeQuote?.mood && (
                 <span className="inline-block mt-2 text-[10px] font-bold px-2 py-0.5 bg-rose-200/50 text-rose-700 rounded-full">

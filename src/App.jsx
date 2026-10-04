@@ -82,15 +82,30 @@ export default function App() {
   useEffect(() => {
     refreshMemories();
 
-    // Real-time synchronization across iPhone & Android via Firebase
+    // 1. Real-time synchronization across iPhone & Android via Firebase
     const unsubscribe = subscribeToMemories((cloudList) => {
       if (cloudList && Array.isArray(cloudList)) {
         setMemories(cloudList);
       }
     });
 
+    // 2. Auto sync whenever the app comes into focus on phone
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshMemories();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // 3. Silent background auto-sync every 8 seconds
+    const interval = setInterval(() => {
+      refreshMemories();
+    }, 8000);
+
     return () => {
       if (unsubscribe) unsubscribe();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(interval);
     };
   }, []);
 

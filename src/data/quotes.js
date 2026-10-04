@@ -71,6 +71,24 @@ export const DEFAULT_QUOTES = [
   }
 ];
 
+export const MINIMAL_CAPTIONS = [
+  "My favorite moment with you.",
+  "With you, every day feels like home.",
+  "Grateful for your smile.",
+  "Together in every step of this journey.",
+  "Holding onto this quiet blessing.",
+  "My favorite peace of mind.",
+  "Blessed with you, Alhamdulillah.",
+  "Cherishing every second spent together.",
+  "Simply us.",
+  "Forever grateful for this chapter.",
+  "Where my heart finds its calm.",
+  "Our journey, one beautiful memory at a time.",
+  "A sweet memory etched in my heart.",
+  "You make ordinary days extraordinary.",
+  "Peace, love, and gratitude."
+];
+
 export const DEFAULT_MEMORIES = [];
 
 export const DATE_IDEAS = [

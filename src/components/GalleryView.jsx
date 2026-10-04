@@ -103,7 +103,9 @@ export default function GalleryView({ memories, onMemoryUpdated, onOpenUpload })
                 <img
                   src={mem.imageUrl}
                   alt={mem.caption || "memory"}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
 
                 {/* Floating Heart / Edit / Delete Actions */}
