@@ -8,6 +8,7 @@ import UploadModal from './components/UploadModal';
 import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
+import MoonBackground from './components/MoonBackground';
 import { getAllMemories, deleteMemory } from './utils/db';
 import { subscribeToMemories, fetchCloudMemories } from './utils/firebase';
 import { DEFAULT_QUOTES } from './data/quotes';
@@ -21,9 +22,28 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [editingMemory, setEditingMemory] = useState(null);
 
+  // Dark / Light Mode with Moon World Theme
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('appTheme') || 'dark';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('appTheme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const [coupleNames, setCoupleNames] = useState(() => {
     return localStorage.getItem('coupleNames') || 'Irfan & Shahana';
   });
+
 
   const [startDate, setStartDate] = useState(() => {
     return localStorage.getItem('startDate') || '2026-03-23';
@@ -110,17 +130,22 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-rose-50/60 via-white to-pink-50/40 flex flex-col selection:bg-rose-200">
+    <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 transition-colors duration-500 relative ${
+      theme === 'dark' ? 'text-slate-100' : 'text-gray-800'
+    }`}>
+      {/* HD Animated World of Moon (Shahana's favorite) */}
+      <MoonBackground theme={theme} />
+
       {/* 4-Digit Security PIN Lock Screen */}
       {isLocked && pinEnabled && (
         <PinLock
           correctPin={appPin}
           onUnlock={handleUnlock}
-          coupleNames={coupleNames}
+          theme={theme}
         />
       )}
 
-      {/* Top Header */}
+      {/* Top Header with Dark/Light Toggle */}
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -129,6 +154,8 @@ export default function App() {
         onLock={handleLock}
         onSync={refreshMemories}
         coupleNames={coupleNames}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
       />
 
       {/* Main Tab Content */}
@@ -141,6 +168,7 @@ export default function App() {
             coupleNames={coupleNames}
             onOpenUpload={() => setIsUploadOpen(true)}
             onOpenEdit={(mem) => setEditingMemory(mem)}
+            theme={theme}
           />
         )}
 
@@ -149,29 +177,39 @@ export default function App() {
             memories={memories}
             onMemoryUpdated={refreshMemories}
             onOpenUpload={() => setIsUploadOpen(true)}
+            theme={theme}
           />
         )}
 
         {activeTab === 'board' && (
-          <LoveBoard coupleNames={coupleNames} />
+          <LoveBoard coupleNames={coupleNames} theme={theme} />
         )}
 
         {activeTab === 'dates' && (
-          <DateSpinner />
+          <DateSpinner theme={theme} />
         )}
       </main>
 
-      {/* Romantic Footer */}
-      <footer className="py-6 border-t border-rose-100 text-center text-xs text-gray-500">
-        <div className="flex items-center justify-center gap-1.5 text-rose-500 font-semibold mb-1">
+      {/* Romantic Moonlit Footer */}
+      <footer className={`py-6 border-t text-center text-xs backdrop-blur-xs transition-colors duration-300 ${
+        theme === 'dark'
+          ? 'border-slate-800/80 bg-slate-950/40 text-slate-400'
+          : 'border-rose-100 bg-white/40 text-gray-500'
+      }`}>
+        <div className={`flex items-center justify-center gap-1.5 font-semibold mb-1 ${
+          theme === 'dark' ? 'text-indigo-400' : 'text-rose-500'
+        }`}>
           <Heart className="w-3.5 h-3.5 fill-current animate-pulse-slow" />
-          <span>Every day with you is a gift</span>
+          <span>Under the same moon, forever with you</span>
           <Sparkles className="w-3 h-3 text-amber-400 fill-amber-400" />
         </div>
-        <p className="text-[11px] text-gray-400">
+        <p className={`text-[11px] ${
+          theme === 'dark' ? 'text-slate-500' : 'text-gray-400'
+        }`}>
           Built with love for Irfan & Shahana
         </p>
       </footer>
+
 
       {/* Modals */}
       <UploadModal

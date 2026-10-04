@@ -216,7 +216,7 @@ export default function SettingsModal({
                     className="w-full text-sm px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400 font-mono tracking-widest text-center"
                   />
                   <p className="text-[11px] text-gray-400 mt-1 text-center">
-                    Default PIN: 0323 (Your relationship date March 23)
+                    Discreet Passcode Protection (Hint: Anniversary)
                   </p>
                 </div>
               )}

@@ -11,7 +11,8 @@ const NOTE_COLORS = [
   'bg-emerald-100 border-emerald-200 text-emerald-900'
 ];
 
-export default function LoveBoard({ coupleNames }) {
+export default function LoveBoard({ coupleNames, theme = 'dark' }) {
+  const isDark = theme === 'dark';
   const [notes, setNotes] = useState([]);
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
@@ -74,26 +75,36 @@ export default function LoveBoard({ coupleNames }) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-100 text-rose-700 mb-2">
+        <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-2 ${
+          isDark ? 'bg-indigo-950/80 text-indigo-300 border border-indigo-800/60' : 'bg-rose-100 text-rose-700'
+        }`}>
           <MessageCircleHeart className="w-3.5 h-3.5" />
           <span>Private Love Notes & Sticky Board</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">
+        <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-800'}`}>
           Sweet Little Notes for You
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           Leave surprise messages, compliments, or romantic reminders for your partner.
         </p>
       </div>
 
       {/* Note Creation Form */}
-      <form onSubmit={handleAddNote} className="bg-white rounded-3xl p-5 shadow-sm border border-rose-100 mb-8 max-w-xl mx-auto">
+      <form onSubmit={handleAddNote} className={`rounded-3xl p-5 shadow-sm border mb-8 max-w-xl mx-auto transition-colors ${
+        isDark 
+          ? 'bg-slate-900/85 backdrop-blur-xl border-slate-800 text-white' 
+          : 'bg-white border-rose-100 text-gray-800'
+      }`}>
         <textarea
           rows={3}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write a sweet note... e.g. 'I loved drinking coffee with you this morning. Good luck today! 🥰'"
-          className="w-full text-sm p-3 rounded-2xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400 focus:border-rose-400 resize-none"
+          className={`w-full text-sm p-3 rounded-2xl border resize-none focus:outline-hidden ${
+            isDark 
+              ? 'bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500' 
+              : 'border-gray-200 focus:ring-2 focus:ring-rose-400 focus:border-rose-400'
+          }`}
         />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-3">
@@ -103,7 +114,11 @@ export default function LoveBoard({ coupleNames }) {
               placeholder="From: (e.g. Your Love)"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
-              className="text-xs px-3 py-1.5 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-1 focus:ring-rose-400 w-full sm:w-40"
+              className={`text-xs px-3 py-1.5 rounded-xl border focus:outline-hidden w-full sm:w-40 ${
+                isDark 
+                  ? 'bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus:ring-1 focus:ring-indigo-500' 
+                  : 'border-gray-200 focus:ring-1 focus:ring-rose-400'
+              }`}
             />
             {/* Color Pickers */}
             <div className="flex items-center gap-1">
@@ -112,7 +127,7 @@ export default function LoveBoard({ coupleNames }) {
                   key={idx}
                   type="button"
                   onClick={() => setColorIndex(idx)}
-                  className={`w-5 h-5 rounded-full border-2 ${c.split(' ')[0]} ${
+                  className={`w-5 h-5 rounded-full border-2 cursor-pointer ${c.split(' ')[0]} ${
                     colorIndex === idx ? 'ring-2 ring-rose-500 ring-offset-1' : ''
                   }`}
                 />
@@ -123,13 +138,18 @@ export default function LoveBoard({ coupleNames }) {
           <button
             type="submit"
             disabled={!content.trim()}
-            className="w-full sm:w-auto bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white text-xs font-semibold px-5 py-2 rounded-full shadow-sm hover:shadow-rose-200 transition-all flex items-center justify-center gap-1.5"
+            className={`w-full sm:w-auto text-white text-xs font-semibold px-5 py-2 rounded-full shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 ${
+              isDark 
+                ? 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-900/50' 
+                : 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
+            }`}
           >
             <Send className="w-3.5 h-3.5" />
             <span>Pin Note</span>
           </button>
         </div>
       </form>
+
 
       {/* Sticky Notes Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
