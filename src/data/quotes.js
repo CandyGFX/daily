@@ -73,38 +73,38 @@ export const DEFAULT_QUOTES = [
 
 export const DEFAULT_MEMORIES = [
   {
-    id: "sample-1",
+    id: "memory-1",
     imageUrl: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80",
-    caption: "The start of our greatest adventure together.",
-    date: "2024-02-14",
-    location: "Sunset Point",
+    caption: "March 23, 2026 — The beautiful day our journey began.",
+    date: "2026-03-23",
+    location: "The Beginning of Forever",
     quote: "In all the world, there is no heart for me like yours.",
     favorite: true
   },
   {
-    id: "sample-2",
+    id: "memory-2",
     imageUrl: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
-    caption: "Laughter, coffee, and stolen glances on cozy mornings.",
-    date: "2024-04-18",
-    location: "Our Favorite Café",
+    caption: "Laughter, sweet conversations, and moments I will cherish forever.",
+    date: "2026-05-15",
+    location: "Our Special Place",
     quote: "You are my today and all of my tomorrows.",
     favorite: true
   },
   {
-    id: "sample-3",
+    id: "memory-3",
     imageUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1200&q=80",
-    caption: "Under the stars, holding hands and dreaming out loud.",
-    date: "2024-07-22",
+    caption: "Under the stars, holding hands and dreaming of our future together.",
+    date: "2026-07-20",
     location: "Under The Midnight Sky",
     quote: "Whatever our souls are made of, yours and mine are the same.",
     favorite: false
   },
   {
-    id: "sample-4",
+    id: "memory-4",
     imageUrl: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=1200&q=80",
-    caption: "Beach walks, warm breeze, and your smile that outshines the horizon.",
-    date: "2024-09-05",
-    location: "Golden Sands Beach",
+    caption: "Sunsets and smiles that brighten every second of my life.",
+    date: "2026-09-10",
+    location: "Golden Sands",
     quote: "Every love story is beautiful, but ours is my favorite.",
     favorite: true
   }

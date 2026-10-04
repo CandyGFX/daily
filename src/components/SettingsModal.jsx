@@ -12,10 +12,16 @@ export default function SettingsModal({
   setCoupleNames, 
   startDate, 
   setStartDate,
+  appPin,
+  setAppPin,
+  pinEnabled,
+  setPinEnabled,
   onDataReset
 }) {
   const [namesInput, setNamesInput] = useState(coupleNames || 'Irfan & Shahana');
   const [dateInput, setDateInput] = useState(startDate || '2026-03-23');
+  const [pinInput, setPinInput] = useState(appPin || '0323');
+  const [pinEnabledInput, setPinEnabledInput] = useState(pinEnabled !== false);
   const [activeTab, setActiveTab] = useState('profile');
   const [statusMsg, setStatusMsg] = useState('');
 
@@ -25,9 +31,13 @@ export default function SettingsModal({
     e.preventDefault();
     localStorage.setItem('coupleNames', namesInput);
     localStorage.setItem('startDate', dateInput);
+    localStorage.setItem('appPin', pinInput);
+    localStorage.setItem('pinEnabled', pinEnabledInput ? 'true' : 'false');
     setCoupleNames(namesInput);
     setStartDate(dateInput);
-    setStatusMsg('Settings saved successfully! 💕');
+    if (setAppPin) setAppPin(pinInput);
+    if (setPinEnabled) setPinEnabled(pinEnabledInput);
+    setStatusMsg('Settings & PIN saved successfully! 💕');
     setTimeout(() => setStatusMsg(''), 2500);
   };
 
@@ -156,7 +166,7 @@ export default function SettingsModal({
               </label>
               <input
                 type="text"
-                placeholder="e.g. Alex & Jordan"
+                placeholder="e.g. Irfan & Shahana"
                 value={namesInput}
                 onChange={(e) => setNamesInput(e.target.value)}
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400"
@@ -176,6 +186,40 @@ export default function SettingsModal({
               <p className="text-[11px] text-gray-400 mt-1">
                 This powers the live "Days Together" milestone counter.
               </p>
+            </div>
+
+            <div className="pt-2 border-t border-rose-100">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  4-Digit PIN Protection
+                </label>
+                <label className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-gray-600">
+                  <input
+                    type="checkbox"
+                    checked={pinEnabledInput}
+                    onChange={(e) => setPinEnabledInput(e.target.checked)}
+                    className="w-4 h-4 text-rose-500 rounded-sm focus:ring-rose-400 accent-rose-500"
+                  />
+                  <span>Require PIN to open app</span>
+                </label>
+              </div>
+
+              {pinEnabledInput && (
+                <div>
+                  <input
+                    type="password"
+                    maxLength={4}
+                    pattern="\d{4}"
+                    placeholder="Enter 4 digits (e.g. 0323)"
+                    value={pinInput}
+                    onChange={(e) => setPinInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    className="w-full text-sm px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400 font-mono tracking-widest text-center"
+                  />
+                  <p className="text-[11px] text-gray-400 mt-1 text-center">
+                    Default PIN: 0323 (Your relationship date March 23)
+                  </p>
+                </div>
+              )}
             </div>
 
             {statusMsg && (

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Heart, Sparkles, Image, BookOpen, Compass, Settings, Plus } from 'lucide-react';
+import { Heart, Sparkles, Image, BookOpen, Compass, Settings, Plus, Lock } from 'lucide-react';
 
-export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSettings, coupleNames }) {
+export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSettings, onLock, coupleNames }) {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-white/80 border-b border-rose-100 shadow-xs transition-all">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -84,9 +84,17 @@ export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSe
           <button
             onClick={onOpenSettings}
             className="p-2 rounded-full text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-colors cursor-pointer"
-            title="Relationship Settings & AWS Info"
+            title="Relationship Settings & Security"
           >
             <Settings className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={onLock}
+            className="p-2 rounded-full text-gray-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-colors cursor-pointer"
+            title="Lock Vault"
+          >
+            <Lock className="w-4 h-4" />
           </button>
         </div>
       </div>
