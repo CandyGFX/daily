@@ -98,3 +98,26 @@ export async function syncDeleteNote(id) {
   const docRef = doc(firestore, "notes", id);
   await deleteDoc(docRef);
 }
+
+// Realtime listener for couple Salah prayers for a specific date
+export function subscribeToSalah(dateStr, callback) {
+  if (!dateStr) return () => {};
+  const docRef = doc(firestore, "salah", dateStr);
+  return onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data());
+    } else {
+      callback(null);
+    }
+  }, (error) => {
+    console.error("Firestore salah subscription error:", error);
+  });
+}
+
+// Save or update couple Salah prayers for a date
+export async function syncSaveSalah(dateStr, data) {
+  if (!dateStr || !data) return;
+  const docRef = doc(firestore, "salah", dateStr);
+  await setDoc(docRef, { ...data, updatedAt: Date.now() }, { merge: true });
+}
+

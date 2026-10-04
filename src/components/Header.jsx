@@ -108,21 +108,22 @@ export default function Header({
             Love Notes
           </button>
           <button
-            onClick={() => setActiveTab('dates')}
+            onClick={() => setActiveTab('salah')}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'dates'
+              activeTab === 'salah'
                 ? isDark 
-                  ? 'bg-indigo-600 text-white shadow-xs' 
-                  : 'bg-rose-500 text-white shadow-xs'
+                  ? 'bg-emerald-600 text-white shadow-xs' 
+                  : 'bg-emerald-600 text-white shadow-xs'
                 : isDark 
                   ? 'text-slate-300 hover:text-white hover:bg-slate-800' 
-                  : 'text-gray-600 hover:text-rose-600 hover:bg-rose-100/50'
+                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
             }`}
           >
-            <Compass className="w-3.5 h-3.5" />
-            Date Ideas
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+            Daily Salah
           </button>
         </nav>
+
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-1.5 sm:space-x-2">
@@ -239,17 +240,18 @@ export default function Header({
           <span>Notes</span>
         </button>
         <button
-          onClick={() => setActiveTab('dates')}
+          onClick={() => setActiveTab('salah')}
           className={`py-1.5 px-2.5 rounded-lg flex flex-col items-center gap-0.5 cursor-pointer ${
-            activeTab === 'dates' 
-              ? (isDark ? 'text-indigo-400 font-bold' : 'text-rose-600 font-bold') 
+            activeTab === 'salah' 
+              ? (isDark ? 'text-emerald-400 font-bold' : 'text-emerald-600 font-bold') 
               : ''
           }`}
         >
-          <Compass className="w-4 h-4" />
-          <span>Dates</span>
+          <CheckCircle2 className="w-4 h-4" />
+          <span>Salah</span>
         </button>
       </div>
     </header>
   );
 }
+

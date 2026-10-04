@@ -3,8 +3,9 @@ import Header from './components/Header';
 import DailyReveal from './components/DailyReveal';
 import GalleryView from './components/GalleryView';
 import LoveBoard from './components/LoveBoard';
-import DateSpinner from './components/DateSpinner';
+import SalahTracker from './components/SalahTracker';
 import UploadModal from './components/UploadModal';
+
 import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
@@ -185,10 +186,11 @@ export default function App() {
           <LoveBoard coupleNames={coupleNames} theme={theme} />
         )}
 
-        {activeTab === 'dates' && (
-          <DateSpinner theme={theme} />
+        {(activeTab === 'salah' || activeTab === 'dates') && (
+          <SalahTracker coupleNames={coupleNames} theme={theme} />
         )}
       </main>
+
 
       {/* Romantic Moonlit Footer */}
       <footer className={`py-6 border-t text-center text-xs backdrop-blur-xs transition-colors duration-300 ${
