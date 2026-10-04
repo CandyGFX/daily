@@ -1,4 +1,5 @@
-// IndexedDB wrapper for storing couple photos and memories locally & persistently
+import { syncSaveMemory, syncDeleteMemory, syncSaveNote, syncDeleteNote } from './firebase';
+
 const DB_NAME = "ForeverDailyDB";
 const DB_VERSION = 1;
 const STORE_MEMORIES = "memories";
@@ -35,6 +36,10 @@ export async function getAllMemories() {
 }
 
 export async function saveMemory(memory) {
+  // 1. Sync to cloud Firebase
+  syncSaveMemory(memory).catch((err) => console.log("Cloud sync note:", err.message));
+
+  // 2. Save locally in IndexedDB
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_MEMORIES, "readwrite");
@@ -46,6 +51,10 @@ export async function saveMemory(memory) {
 }
 
 export async function deleteMemory(id) {
+  // 1. Delete from cloud Firebase
+  syncDeleteMemory(id).catch((err) => console.log("Cloud delete note:", err.message));
+
+  // 2. Delete locally from IndexedDB
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_MEMORIES, "readwrite");
@@ -68,6 +77,10 @@ export async function getAllNotes() {
 }
 
 export async function saveNote(note) {
+  // 1. Sync to cloud Firebase
+  syncSaveNote(note).catch((err) => console.log("Cloud note sync:", err.message));
+
+  // 2. Save locally
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NOTES, "readwrite");
@@ -79,6 +92,10 @@ export async function saveNote(note) {
 }
 
 export async function deleteNote(id) {
+  // 1. Delete from cloud Firebase
+  syncDeleteNote(id).catch((err) => console.log("Cloud note delete:", err.message));
+
+  // 2. Delete locally
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NOTES, "readwrite");

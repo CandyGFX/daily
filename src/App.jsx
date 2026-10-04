@@ -9,6 +9,7 @@ import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
 import { getAllMemories, deleteMemory } from './utils/db';
+import { subscribeToMemories } from './utils/firebase';
 import { DEFAULT_QUOTES } from './data/quotes';
 import { Heart, Sparkles } from 'lucide-react';
 
@@ -73,6 +74,17 @@ export default function App() {
 
   useEffect(() => {
     refreshMemories();
+
+    // Real-time synchronization across iPhone & Android via Firebase
+    const unsubscribe = subscribeToMemories((cloudList) => {
+      if (cloudList && Array.isArray(cloudList)) {
+        setMemories(cloudList);
+      }
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   return (

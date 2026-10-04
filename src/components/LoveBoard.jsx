@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Plus, Trash2, Send, MessageCircleHeart } from 'lucide-react';
 import { getAllNotes, saveNote, deleteNote } from '../utils/db';
+import { subscribeToNotes } from '../utils/firebase';
 
 const NOTE_COLORS = [
   'bg-rose-100 border-rose-200 text-rose-900',
@@ -19,11 +20,10 @@ export default function LoveBoard({ coupleNames }) {
   const loadNotes = async () => {
     const list = await getAllNotes();
     if (list.length === 0) {
-      // Seed initial romantic welcome note
       const initial = {
         id: 'initial_note',
         content: "Leave surprise sweet messages, compliments, or reminders for each other here! 💕",
-        author: "Our Love Story",
+        author: "Irfan & Shahana",
         colorClass: NOTE_COLORS[0],
         createdAt: new Date().toLocaleDateString()
       };
@@ -36,6 +36,17 @@ export default function LoveBoard({ coupleNames }) {
 
   useEffect(() => {
     loadNotes();
+
+    // Real-time synchronization of notes across iPhone & Android
+    const unsubscribe = subscribeToNotes((cloudNotes) => {
+      if (cloudNotes && Array.isArray(cloudNotes) && cloudNotes.length > 0) {
+        setNotes(cloudNotes);
+      }
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const handleAddNote = async (e) => {
