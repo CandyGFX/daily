@@ -1,0 +1,153 @@
+import React, { useState, useEffect } from 'react';
+import { Heart, Plus, Trash2, Send, MessageCircleHeart } from 'lucide-react';
+import { getAllNotes, saveNote, deleteNote } from '../utils/db';
+
+const NOTE_COLORS = [
+  'bg-rose-100 border-rose-200 text-rose-900',
+  'bg-amber-100 border-amber-200 text-amber-900',
+  'bg-pink-100 border-pink-200 text-pink-900',
+  'bg-purple-100 border-purple-200 text-purple-900',
+  'bg-emerald-100 border-emerald-200 text-emerald-900'
+];
+
+export default function LoveBoard({ coupleNames }) {
+  const [notes, setNotes] = useState([]);
+  const [content, setContent] = useState('');
+  const [author, setAuthor] = useState('');
+  const [colorIndex, setColorIndex] = useState(0);
+
+  const loadNotes = async () => {
+    const list = await getAllNotes();
+    if (list.length === 0) {
+      // Seed initial romantic welcome note
+      const initial = {
+        id: 'initial_note',
+        content: "Leave surprise sweet messages, compliments, or reminders for each other here! 💕",
+        author: "Our Love Story",
+        colorClass: NOTE_COLORS[0],
+        createdAt: new Date().toLocaleDateString()
+      };
+      await saveNote(initial);
+      setNotes([initial]);
+    } else {
+      setNotes(list);
+    }
+  };
+
+  useEffect(() => {
+    loadNotes();
+  }, []);
+
+  const handleAddNote = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+
+    const newNote = {
+      id: 'note_' + Date.now(),
+      content: content.trim(),
+      author: author.trim() || "Your Love",
+      colorClass: NOTE_COLORS[colorIndex],
+      createdAt: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    };
+
+    await saveNote(newNote);
+    setContent('');
+    await loadNotes();
+  };
+
+  const handleDeleteNote = async (id) => {
+    await deleteNote(id);
+    await loadNotes();
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-100 text-rose-700 mb-2">
+          <MessageCircleHeart className="w-3.5 h-3.5" />
+          <span>Private Love Notes & Sticky Board</span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">
+          Sweet Little Notes for You
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Leave surprise messages, compliments, or romantic reminders for your partner.
+        </p>
+      </div>
+
+      {/* Note Creation Form */}
+      <form onSubmit={handleAddNote} className="bg-white rounded-3xl p-5 shadow-sm border border-rose-100 mb-8 max-w-xl mx-auto">
+        <textarea
+          rows={3}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write a sweet note... e.g. 'I loved drinking coffee with you this morning. Good luck today! 🥰'"
+          className="w-full text-sm p-3 rounded-2xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-rose-400 focus:border-rose-400 resize-none"
+        />
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-3">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="From: (e.g. Your Love)"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="text-xs px-3 py-1.5 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-1 focus:ring-rose-400 w-full sm:w-40"
+            />
+            {/* Color Pickers */}
+            <div className="flex items-center gap-1">
+              {NOTE_COLORS.map((c, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setColorIndex(idx)}
+                  className={`w-5 h-5 rounded-full border-2 ${c.split(' ')[0]} ${
+                    colorIndex === idx ? 'ring-2 ring-rose-500 ring-offset-1' : ''
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={!content.trim()}
+            className="w-full sm:w-auto bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white text-xs font-semibold px-5 py-2 rounded-full shadow-sm hover:shadow-rose-200 transition-all flex items-center justify-center gap-1.5"
+          >
+            <Send className="w-3.5 h-3.5" />
+            <span>Pin Note</span>
+          </button>
+        </div>
+      </form>
+
+      {/* Sticky Notes Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        {notes.map((note) => (
+          <div
+            key={note.id}
+            className={`p-5 rounded-3xl border shadow-sm transition-all transform hover:-translate-y-1 relative group flex flex-col justify-between min-h-[140px] ${
+              note.colorClass || NOTE_COLORS[0]
+            }`}
+          >
+            <button
+              onClick={() => handleDeleteNote(note.id)}
+              className="absolute top-3 right-3 p-1 rounded-full text-black/30 hover:text-black/70 hover:bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"
+              title="Delete note"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+
+            <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap">
+              "{note.content}"
+            </p>
+
+            <div className="flex items-center justify-between text-[11px] font-semibold opacity-75 mt-4 pt-2 border-t border-black/10">
+              <span>— {note.author}</span>
+              <span>{note.createdAt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
