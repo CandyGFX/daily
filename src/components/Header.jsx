@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, Sparkles, Image, BookOpen, Compass, Settings, Plus, Lock, RefreshCw, Moon, Sun } from 'lucide-react';
+import { Heart, Sparkles, Image, BookOpen, CheckCircle2, Settings, Plus, Lock, RefreshCw, Moon, Sun } from 'lucide-react';
+
 
 export default function Header({ 
   activeTab, 
