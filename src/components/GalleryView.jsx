@@ -116,10 +116,12 @@ export default function GalleryView({ memories, onMemoryUpdated, onOpenUpload, t
               onClick={() => setSelectedPhoto(mem)}
               className={`rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 group cursor-pointer flex flex-col border ${
                 isDark 
-                  ? 'bg-slate-900/85 backdrop-blur-xl border-slate-800 text-white hover:border-indigo-500/50' 
-                  : 'bg-white border-rose-100/80 text-gray-800'
+                  ? 'bg-slate-900/95 border-slate-800 text-white hover:border-indigo-500/50' 
+                  : 'bg-white/95 border-rose-100/80 text-gray-800'
               }`}
+              style={{ contentVisibility: 'auto', containIntrinsicSize: '360px', transform: 'translateZ(0)' }}
             >
+
               {/* Photo Area */}
               <div className={`relative aspect-4/3 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-rose-50'}`}>
                 <img
