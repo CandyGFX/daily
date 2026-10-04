@@ -1,7 +1,15 @@
-import React from 'react';
-import { Heart, Sparkles, Image, BookOpen, Compass, Settings, Plus, Lock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, Sparkles, Image, BookOpen, Compass, Settings, Plus, Lock, RefreshCw } from 'lucide-react';
 
-export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSettings, onLock, coupleNames }) {
+export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSettings, onLock, onSync, coupleNames }) {
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncClick = async () => {
+    if (isSyncing) return;
+    setIsSyncing(true);
+    if (onSync) await onSync();
+    setTimeout(() => setIsSyncing(false), 800);
+  };
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-white/80 border-b border-rose-100 shadow-xs transition-all">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -79,6 +87,15 @@ export default function Header({ activeTab, setActiveTab, onOpenUpload, onOpenSe
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">Add Photo</span>
+          </button>
+
+          <button
+            onClick={handleSyncClick}
+            disabled={isSyncing}
+            className="p-2 rounded-full text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-colors cursor-pointer"
+            title="Sync Cloud Photos & Notes"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-rose-500' : ''}`} />
           </button>
 
           <button

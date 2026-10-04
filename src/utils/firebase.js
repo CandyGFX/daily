@@ -39,6 +39,23 @@ export function subscribeToMemories(callback) {
   });
 }
 
+// Fetch memories from cloud directly
+export async function fetchCloudMemories() {
+  try {
+    const colRef = collection(firestore, "memories");
+    const snap = await getDocs(colRef);
+    const list = [];
+    snap.forEach((docSnap) => {
+      list.push(docSnap.data());
+    });
+    list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    return list;
+  } catch (err) {
+    console.error("fetchCloudMemories error:", err);
+    return [];
+  }
+}
+
 // Save or update memory to cloud
 export async function syncSaveMemory(memory) {
   if (!memory.id) return;

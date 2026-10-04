@@ -9,7 +9,7 @@ import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
 import { getAllMemories, deleteMemory } from './utils/db';
-import { subscribeToMemories } from './utils/firebase';
+import { subscribeToMemories, fetchCloudMemories } from './utils/firebase';
 import { DEFAULT_QUOTES } from './data/quotes';
 import { Heart, Sparkles } from 'lucide-react';
 
@@ -53,9 +53,17 @@ export default function App() {
     setIsLocked(true);
   };
 
-  // Load memories from IndexedDB & automatically purge any old demo/sample photos
+  // Load memories from cloud & local storage
   const refreshMemories = async () => {
     try {
+      // 1. Fetch from Firebase Cloud first so partner's photos sync immediately
+      const cloudMemories = await fetchCloudMemories();
+      if (cloudMemories && cloudMemories.length > 0) {
+        setMemories(cloudMemories);
+        return;
+      }
+
+      // 2. Fallback to local storage
       const stored = await getAllMemories();
       const realMemories = [];
       for (const m of stored) {
@@ -68,7 +76,6 @@ export default function App() {
       setMemories(realMemories);
     } catch (err) {
       console.error("Failed loading memories:", err);
-      setMemories([]);
     }
   };
 
@@ -105,6 +112,7 @@ export default function App() {
         onOpenUpload={() => setIsUploadOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onLock={handleLock}
+        onSync={refreshMemories}
         coupleNames={coupleNames}
       />
 

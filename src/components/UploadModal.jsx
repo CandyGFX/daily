@@ -20,8 +20,8 @@ export default function UploadModal({ isOpen, onClose, onMemoryAdded }) {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
+          const MAX_WIDTH = 900;
+          const MAX_HEIGHT = 900;
           let width = img.width;
           let height = img.height;
 
@@ -42,8 +42,8 @@ export default function UploadModal({ isOpen, onClose, onMemoryAdded }) {
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Compress to beautiful high-definition JPEG (~150KB)
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          // Compress to lightweight high-definition JPEG (~100KB-180KB, strictly under 1MB)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.72);
           resolve(dataUrl);
         };
         img.src = event.target.result;
