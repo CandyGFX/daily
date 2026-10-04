@@ -7,8 +7,9 @@ import DateSpinner from './components/DateSpinner';
 import UploadModal from './components/UploadModal';
 import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
-import { getAllMemories, saveMemory } from './utils/db';
-import { DEFAULT_MEMORIES, DEFAULT_QUOTES } from './data/quotes';
+import EditMemoryModal from './components/EditMemoryModal';
+import { getAllMemories, deleteMemory } from './utils/db';
+import { DEFAULT_QUOTES } from './data/quotes';
 import { Heart, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
   const [quotes] = useState(DEFAULT_QUOTES);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [editingMemory, setEditingMemory] = useState(null);
 
   const [coupleNames, setCoupleNames] = useState(() => {
     return localStorage.getItem('coupleNames') || 'Irfan & Shahana';
@@ -50,22 +52,22 @@ export default function App() {
     setIsLocked(true);
   };
 
-  // Load memories from IndexedDB
+  // Load memories from IndexedDB & automatically purge any old demo/sample photos
   const refreshMemories = async () => {
     try {
       const stored = await getAllMemories();
-      if (stored.length === 0) {
-        // Initialize default sample memories so the app starts gorgeous
-        for (const sample of DEFAULT_MEMORIES) {
-          await saveMemory(sample);
+      const realMemories = [];
+      for (const m of stored) {
+        if (m.id && (m.id.startsWith('sample-') || m.id.startsWith('memory-'))) {
+          await deleteMemory(m.id);
+        } else {
+          realMemories.push(m);
         }
-        setMemories(DEFAULT_MEMORIES);
-      } else {
-        setMemories(stored);
       }
+      setMemories(realMemories);
     } catch (err) {
       console.error("Failed loading memories:", err);
-      setMemories(DEFAULT_MEMORIES);
+      setMemories([]);
     }
   };
 
@@ -103,6 +105,7 @@ export default function App() {
             startDate={startDate}
             coupleNames={coupleNames}
             onOpenUpload={() => setIsUploadOpen(true)}
+            onOpenEdit={(mem) => setEditingMemory(mem)}
           />
         )}
 
@@ -155,6 +158,15 @@ export default function App() {
         setPinEnabled={setPinEnabled}
         onDataReset={refreshMemories}
       />
+
+      {editingMemory && (
+        <EditMemoryModal
+          isOpen={!!editingMemory}
+          memory={editingMemory}
+          onClose={() => setEditingMemory(null)}
+          onMemoryUpdated={refreshMemories}
+        />
+      )}
     </div>
   );
 }

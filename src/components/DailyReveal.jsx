@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { 
   Heart, Sparkles, Calendar, MapPin, RefreshCw, 
-  Share2, Eye, Flame, Clock, Award
+  Share2, Eye, Flame, Clock, Award, Edit3 
 } from 'lucide-react';
 
 export default function DailyReveal({ 
@@ -10,7 +10,8 @@ export default function DailyReveal({
   quotes, 
   startDate, 
   coupleNames, 
-  onOpenUpload 
+  onOpenUpload,
+  onOpenEdit
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
@@ -239,18 +240,37 @@ export default function DailyReveal({
                   <Calendar className="w-3.5 h-3.5 text-rose-400" />
                   {currentMemory?.date || dateStr}
                 </span>
-                {currentMemory?.location && (
-                  <span className="flex items-center gap-1 text-gray-600">
-                    <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                    {currentMemory.location}
-                  </span>
-                )}
+                <div className="flex items-center gap-2">
+                  {currentMemory?.location && (
+                    <span className="flex items-center gap-1 text-gray-600">
+                      <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                      {currentMemory.location}
+                    </span>
+                  )}
+                  {currentMemory && onOpenEdit && (
+                    <button
+                      onClick={() => onOpenEdit(currentMemory)}
+                      className="p-1 px-2 rounded-lg text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-1 text-[11px] font-semibold cursor-pointer"
+                      title="Edit caption & details"
+                    >
+                      <Edit3 className="w-3 h-3" />
+                      <span>Edit Caption</span>
+                    </button>
+                  )}
+                </div>
               </div>
-              {currentMemory?.caption && (
+              {currentMemory?.caption ? (
                 <p className="text-xs sm:text-sm text-gray-700 font-medium italic mt-1 px-1">
                   "{currentMemory.caption}"
                 </p>
-              )}
+              ) : currentMemory ? (
+                <p 
+                  onClick={() => onOpenEdit && onOpenEdit(currentMemory)}
+                  className="text-xs text-gray-400 italic mt-1 px-1 cursor-pointer hover:text-rose-500"
+                >
+                  + Add a caption to today's memory...
+                </p>
+              ) : null}
             </div>
 
             {/* Daily Quote Box */}
