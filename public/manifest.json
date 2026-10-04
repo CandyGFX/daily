@@ -1,0 +1,18 @@
+{
+  "name": "Irfan & Shahana — Our Love Story",
+  "short_name": "Our Love",
+  "description": "Daily relationship photos, memories, and quotes for Irfan & Shahana",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff0f3",
+  "theme_color": "#f43f5e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
