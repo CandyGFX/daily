@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { 
   X, Settings, Download, Upload, 
-  Cloud, ExternalLink 
+  Cloud, ExternalLink, Heart 
 } from 'lucide-react';
+
 import { getAllMemories, getAllNotes, saveMemory, saveNote } from '../utils/db';
 
 export default function SettingsModal({ 
@@ -230,12 +231,25 @@ export default function SettingsModal({
 
             <button
               type="submit"
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold py-3 rounded-full shadow-md shadow-rose-200 transition-all"
+              className="w-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold py-3 rounded-full shadow-md shadow-rose-200 transition-all cursor-pointer"
             >
               Save Profile
             </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                localStorage.removeItem('ponnu_surprise_seen');
+                window.location.reload();
+              }}
+              className="w-full mt-2 py-2.5 px-4 rounded-full border border-rose-200 text-rose-600 bg-rose-50/60 hover:bg-rose-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Heart className="w-3.5 h-3.5 fill-current text-rose-500" />
+              <span>Test / Replay "Ponnu" Surprise Popup 💕</span>
+            </button>
           </form>
         )}
+
 
         {activeTab === 'backup' && (
           <div className="space-y-4">

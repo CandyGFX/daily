@@ -10,7 +10,9 @@ import SettingsModal from './components/SettingsModal';
 import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
 import MoonBackground from './components/MoonBackground';
+import SurpriseModal from './components/SurpriseModal';
 import { getAllMemories, deleteMemory } from './utils/db';
+
 import { subscribeToMemories, fetchCloudMemories } from './utils/firebase';
 import { DEFAULT_QUOTES } from './data/quotes';
 import { Heart, Sparkles } from 'lucide-react';
@@ -146,7 +148,11 @@ export default function App() {
         />
       )}
 
+      {/* One-Time Romantic Surprise Modal for Ponnu */}
+      <SurpriseModal isUnlocked={!isLocked} theme={theme} />
+
       {/* Top Header with Dark/Light Toggle */}
+
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
