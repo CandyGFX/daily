@@ -121,3 +121,35 @@ export async function syncSaveSalah(dateStr, data) {
   await setDoc(docRef, { ...data, updatedAt: Date.now() }, { merge: true });
 }
 
+// Discreet Call Signal & Camouflage Alert
+export async function sendCallSignal(signalData) {
+  const docRef = doc(firestore, "signals", "call_signal");
+  await setDoc(docRef, {
+    ...signalData,
+    timestamp: Date.now(),
+    status: 'pending',
+    respondedAt: null
+  });
+}
+
+export async function respondCallSignal(status) {
+  const docRef = doc(firestore, "signals", "call_signal");
+  await setDoc(docRef, {
+    status,
+    respondedAt: Date.now()
+  }, { merge: true });
+}
+
+export function subscribeToCallSignal(callback) {
+  const docRef = doc(firestore, "signals", "call_signal");
+  return onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data());
+    } else {
+      callback(null);
+    }
+  }, (error) => {
+    console.error("Firestore call_signal subscription error:", error);
+  });
+}
+

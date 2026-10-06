@@ -11,6 +11,7 @@ import PinLock from './components/PinLock';
 import EditMemoryModal from './components/EditMemoryModal';
 import MoonBackground from './components/MoonBackground';
 import SurpriseModal from './components/SurpriseModal';
+import DiscreetCallManager from './components/DiscreetCallManager';
 import { getAllMemories, deleteMemory } from './utils/db';
 
 import { subscribeToMemories, fetchCloudMemories } from './utils/firebase';
@@ -23,6 +24,7 @@ export default function App() {
   const [quotes] = useState(DEFAULT_QUOTES);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCallSignalOpen, setIsCallSignalOpen] = useState(false);
   const [editingMemory, setEditingMemory] = useState(null);
 
   // Dark / Light Mode with Moon World Theme
@@ -151,13 +153,21 @@ export default function App() {
       {/* One-Time Romantic Surprise Modal for Ponnu */}
       <SurpriseModal isUnlocked={!isLocked} theme={theme} />
 
-      {/* Top Header with Dark/Light Toggle */}
+      {/* Discreet Call Signal & Vibrate Manager (Always active in background for incoming signals) */}
+      <DiscreetCallManager
+        isOpen={isCallSignalOpen}
+        onClose={() => setIsCallSignalOpen(false)}
+        theme={theme}
+        coupleNames={coupleNames}
+      />
 
+      {/* Top Header with Dark/Light Toggle */}
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenUpload={() => setIsUploadOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenCallSignal={() => setIsCallSignalOpen(true)}
         onLock={handleLock}
         onSync={refreshMemories}
         coupleNames={coupleNames}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   X, Settings, Download, Upload, 
-  Cloud, ExternalLink, Heart 
+  Cloud, ExternalLink, Heart, Smartphone 
 } from 'lucide-react';
 
 import { getAllMemories, getAllNotes, saveMemory, saveNote } from '../utils/db';
@@ -23,6 +23,7 @@ export default function SettingsModal({
   const [dateInput, setDateInput] = useState(startDate || '2026-03-23');
   const [pinInput, setPinInput] = useState(appPin || '0323');
   const [pinEnabledInput, setPinEnabledInput] = useState(pinEnabled !== false);
+  const [roleInput, setRoleInput] = useState(() => localStorage.getItem('userRole') || 'Irfan');
   const [activeTab, setActiveTab] = useState('profile');
   const [statusMsg, setStatusMsg] = useState('');
 
@@ -34,11 +35,12 @@ export default function SettingsModal({
     localStorage.setItem('startDate', dateInput);
     localStorage.setItem('appPin', pinInput);
     localStorage.setItem('pinEnabled', pinEnabledInput ? 'true' : 'false');
+    localStorage.setItem('userRole', roleInput);
     setCoupleNames(namesInput);
     setStartDate(dateInput);
     if (setAppPin) setAppPin(pinInput);
     if (setPinEnabled) setPinEnabled(pinEnabledInput);
-    setStatusMsg('Settings & PIN saved successfully! 💕');
+    setStatusMsg('Settings & Profile saved successfully! 💕');
     setTimeout(() => setStatusMsg(''), 2500);
   };
 
@@ -223,6 +225,40 @@ export default function SettingsModal({
               )}
             </div>
 
+            {/* Device Ownership / Role */}
+            <div className="pt-2 border-t border-rose-100">
+              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+                This Phone Belongs To
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRoleInput('Irfan')}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    roleInput === 'Irfan'
+                      ? 'bg-rose-500 text-white border-rose-500 shadow-sm'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  <span>Irfan 👨🏻</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRoleInput('Shahana')}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    roleInput === 'Shahana'
+                      ? 'bg-rose-500 text-white border-rose-500 shadow-sm'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  <span>Shahana 👩🏻</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-gray-400 mt-1">
+                Used to route discreet call vibration signals to the other phone.
+              </p>
+            </div>
+
             {statusMsg && (
               <p className="text-xs text-emerald-600 font-semibold text-center bg-emerald-50 py-1.5 rounded-lg">
                 {statusMsg}
@@ -236,17 +272,32 @@ export default function SettingsModal({
               Save Profile
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                localStorage.removeItem('ponnu_surprise_seen');
-                window.location.reload();
-              }}
-              className="w-full mt-2 py-2.5 px-4 rounded-full border border-rose-200 text-rose-600 bg-rose-50/60 hover:bg-rose-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Heart className="w-3.5 h-3.5 fill-current text-rose-500" />
-              <span>Test / Replay "Ponnu" Surprise Popup 💕</span>
-            </button>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                    navigator.vibrate([400, 200, 400, 200, 600]);
+                  }
+                }}
+                className="py-2.5 px-3 rounded-full border border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Test Buzz 📳</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem('ponnu_surprise_seen');
+                  window.location.reload();
+                }}
+                className="py-2.5 px-3 rounded-full border border-rose-200 text-rose-600 bg-rose-50/60 hover:bg-rose-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Heart className="w-3.5 h-3.5 fill-current text-rose-500" />
+                <span>Replay Surprise 💕</span>
+              </button>
+            </div>
           </form>
         )}
 

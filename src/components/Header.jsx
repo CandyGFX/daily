@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Sparkles, Image, BookOpen, CheckCircle2, Settings, Plus, Lock, RefreshCw, Moon, Sun } from 'lucide-react';
+import { Heart, Sparkles, Image, BookOpen, CheckCircle2, Settings, Plus, Lock, RefreshCw, Moon, Sun, PhoneCall } from 'lucide-react';
 
 
 export default function Header({ 
@@ -7,6 +7,7 @@ export default function Header({
   setActiveTab, 
   onOpenUpload, 
   onOpenSettings, 
+  onOpenCallSignal,
   onLock, 
   onSync, 
   coupleNames,
@@ -171,6 +172,19 @@ export default function Header({
             ) : (
               <Moon className="w-4 h-4 text-indigo-600 hover:scale-110 transition-transform" />
             )}
+          </button>
+
+          {/* Discreet Call Signal & Buzz Button */}
+          <button
+            onClick={onOpenCallSignal}
+            className={`p-2 rounded-full transition-all cursor-pointer border ${
+              isDark
+                ? 'bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border-emerald-800/60 shadow-xs'
+                : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200/60 shadow-xs'
+            }`}
+            title="Discreet Call Signal & Phone Buzz 📳"
+          >
+            <PhoneCall className="w-4 h-4" />
           </button>
 
           {/* Settings Button */}
